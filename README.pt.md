@@ -11,7 +11,7 @@
 
 ## Requisitos
 
-- **Python 3.9** ou superior
+- **Python 3.9**
 
 ## Tecnologias Utilizadas
 
@@ -41,6 +41,11 @@
 4. Baixe o modelo de idioma para o Vosk:
    - Visite a página oficial do [Vosk Models](https://alphacephei.com/vosk/models) e baixe o modelo apropriado para o idioma desejado.
    - Extraia o modelo no diretório do projeto.
+
+
+5. Instruções de Configuração:
+   - Crie uma pasta chamada `model` no diretório raiz do projeto para armazenar o modelo Vosk.
+   - No diretório raiz do projeto, crie um arquivo chamado `text.txt` para receber o texto transcrito em tempo real.
 
 ## Como Usar
 

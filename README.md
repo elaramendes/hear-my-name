@@ -14,7 +14,7 @@ This project also has a [Portuguese version](README.pt.md).
 
 ## Requirements
 
-- **Python 3.9** or higher
+- **Python 3.9**
 
 ## Technologies Used
 
@@ -44,6 +44,11 @@ This project also has a [Portuguese version](README.pt.md).
 4. Download the language model for Vosk:
    - Visit the official [Vosk Models](https://alphacephei.com/vosk/models) page and download the appropriate model for the desired language.
    - Extract the model into the project directory.
+
+
+5. Setup Instructions:
+   - Create a directory named `model` in the project root to store the Vosk model.
+   - In the project root directory, create a file named `text.txt` to receive real-time transcribed text.
 
 ## How to Use
 
