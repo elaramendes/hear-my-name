@@ -2,8 +2,13 @@
 
 This project also has a [Portuguese version](README.pt.md).
 
-
 **Hear-My-Name** is an application that captures sounds and emits a notification when it detects a person's name. The project uses voice recognition with the **Vosk** library to listen to sounds in real-time and alerts the user when their name is mentioned.
+
+## Our Members
+
+- Elara Mendes
+- Victor Emanuel
+- Pollyana Caetano
 
 ## Features
 

@@ -2,6 +2,12 @@
 
 **Hear-My-Name** é um aplicativo que captura sons e emite um aviso quando detecta o nome de uma pessoa. O projeto utiliza reconhecimento de voz com a biblioteca **Vosk** para ouvir sons em tempo real e alerta o usuário quando seu nome é mencionado.
 
+## Membros
+
+- Elara Mendes
+- Victor Emanuel
+- Pollyana Caetano
+
 ## Funcionalidades
 
 - Captura de som em tempo real.
