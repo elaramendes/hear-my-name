@@ -1,8 +1,5 @@
-from cProfile import label
-from pydoc import pager
-
 import flet as ft
-
+from song_fn import play_music, stop_song
 import cli
 import threading
 
@@ -11,16 +8,14 @@ def main(page: ft.Page):
     page.title = "Voice Recorder"
     page.window_width = 350
     page.window_height = 350
-    page.bgcolor = "#e9ecef"
+    page.bgcolor = "#023047"
 
     def on_navigation_change(e):
-        selected_index = e.control.selected_index
-        if selected_index == 1:
-            record_content.visible = False
-            song_content.visible = True
+        page.clean()
+        if page.navigation_bar.selected_index == 0:
+            page.add(record_content)
         else:
-            record_content.visible = True
-            song_content.visible = False
+            page.add(song_content)
         page.update()
 
     page.navigation_bar = ft.NavigationBar(
@@ -74,7 +69,16 @@ def main(page: ft.Page):
     button = ft.ElevatedButton(text="Submit", on_click=submit_button)
     record_button = ft.ElevatedButton(text="Start", on_click=toggle_button)
 
+    def play_song(e):
+        music_file = "songs/Shotgun Willy - Good Morning Vietnam.mp3"
+        play_music(music_file)
 
+    def stop_music(e):
+        # ft.Text("Song stopped!")
+        stop_song()
+
+    play_song = ft.ElevatedButton(text="Play", on_click=play_song)
+    stop_song_button = ft.ElevatedButton(text="Stop", on_click=stop_music)
 
     # Structure
     record_content = ft.Column(
@@ -90,11 +94,13 @@ def main(page: ft.Page):
 
     song_content = ft.Column(
         [
-            ft.Text("Making a test here")
-        ]
+            ft.Text("Song 1", size=20, weight=ft.FontWeight.BOLD),
+            ft.Row([play_song, stop_song_button], alignment=ft.MainAxisAlignment.SPACE_EVENLY)
+        ],
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )
 
-    page.add(record_content, song_content)
+    page.add(record_content)
     page.update()
 
 ft.app(main)
