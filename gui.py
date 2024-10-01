@@ -1,3 +1,5 @@
+from cProfile import label
+
 import flet as ft
 
 import cli
@@ -9,6 +11,18 @@ def main(page: ft.Page):
     page.window_width = 350
     page.window_height = 350
     page.bgcolor = "#e9ecef"
+    page.navigation_bar = ft.NavigationBar(
+        destinations=[
+            ft.NavigationDestination(
+                icon=ft.icons.MIC,
+                label="Record"
+            ),
+            ft.NavigationDestination(
+                icon=ft.icons.PLAY_CIRCLE_FILL_ROUNDED,
+                label="Songs"
+            )
+        ]
+    )
     is_recording = False
 
     def submit_button(e):
@@ -43,6 +57,8 @@ def main(page: ft.Page):
 
     button = ft.ElevatedButton(text="Submit", on_click=submit_button)
     record_button = ft.ElevatedButton(text="Start", on_click=toggle_button)
+
+
 
     # Structure
     page.add(
