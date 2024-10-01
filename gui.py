@@ -1,4 +1,5 @@
 from cProfile import label
+from pydoc import pager
 
 import flet as ft
 
@@ -11,7 +12,20 @@ def main(page: ft.Page):
     page.window_width = 350
     page.window_height = 350
     page.bgcolor = "#e9ecef"
+
+    def on_navigation_change(e):
+        selected_index = e.control.selected_index
+        if selected_index == 1:
+            record_content.visible = False
+            song_content.visible = True
+        else:
+            record_content.visible = True
+            song_content.visible = False
+        page.update()
+
     page.navigation_bar = ft.NavigationBar(
+        selected_index=0,
+        on_change=on_navigation_change,
         destinations=[
             ft.NavigationDestination(
                 icon=ft.icons.MIC,
@@ -19,11 +33,13 @@ def main(page: ft.Page):
             ),
             ft.NavigationDestination(
                 icon=ft.icons.PLAY_CIRCLE_FILL_ROUNDED,
-                label="Songs"
+                label="Songs",
             )
         ]
     )
+
     is_recording = False
+    page.update()
 
     def submit_button(e):
         if tf1.value != "":
@@ -61,26 +77,24 @@ def main(page: ft.Page):
 
 
     # Structure
-    page.add(
-        ft.Column(
-            [
-                ft.Text("Write your name below", size=20, weight=ft.FontWeight.BOLD),
-                t, tf1
-            ],
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER
-        ),
-        ft.Row(
-            [
-            button, record_button
+    record_content = ft.Column(
+        [
+            ft.Text("Write your name below", size=20, weight=ft.FontWeight.BOLD),
+            t,
+            tf1,
+            ft.Row([button, record_button], alignment=ft.MainAxisAlignment.CENTER),
+            ft.Row([real_time_text], alignment=ft.MainAxisAlignment.CENTER)
         ],
-            alignment=ft.MainAxisAlignment.CENTER
-    ),
-        ft.Row(
-            [
-               real_time_text
-            ],
-            alignment=ft.MainAxisAlignment.CENTER
-        )
-)
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER
+    )
+
+    song_content = ft.Column(
+        [
+            ft.Text("Making a test here")
+        ]
+    )
+
+    page.add(record_content, song_content)
+    page.update()
 
 ft.app(main)
