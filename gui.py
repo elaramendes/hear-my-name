@@ -1,6 +1,7 @@
 import flet as ft
 from utils import AudioRecorder, PlaySong
 import threading
+import os
 
 
 def main(page: ft.Page):
@@ -69,14 +70,30 @@ def main(page: ft.Page):
     record_button = ft.ElevatedButton(text="Start", on_click=toggle_button)
 
     # Songs Section
+    songs = [
+        "songs/Song 1.mp3",
+        "songs/Song 2.mp3",
+        "songs/Song 3.mp3"
+    ]
+
     player = PlaySong()
-    def play_song(e):
-        player.play_song("songs/Shotgun Willy - Good Morning Vietnam.mp3")
+    def play_selected_song(song):
+        def inner_play_song(e):
+            player.play_song(song)
+        return inner_play_song
 
     def stop_song(e):
         player.stop_song()
 
-    play_song = ft.ElevatedButton(text="Play", on_click=play_song)
+    def play_song_thread(player, file):
+        player.play_song(file)
+
+    song_buttons = []
+    for song in songs:
+        song_without_extension = os.path.splitext(song)[0]
+        song_name = song_without_extension.split("/")[-1]
+        song_buttons.append(ft.ElevatedButton(text=f"Play {song_name}", on_click=lambda e, song=song: threading.Thread(target=play_song_thread, args=(player, song)).start()))
+
     stop_song_button = ft.ElevatedButton(text="Stop", on_click=stop_song)
 
     # Structure
@@ -93,8 +110,9 @@ def main(page: ft.Page):
 
     song_content = ft.Column(
         [
-            ft.Text("Song 1", size=20, weight=ft.FontWeight.BOLD),
-            ft.Row([play_song, stop_song_button], alignment=ft.MainAxisAlignment.SPACE_EVENLY)
+            ft.Text("Songs", size=20, weight=ft.FontWeight.BOLD),
+            *song_buttons,
+            ft.Row([stop_song_button], alignment=ft.MainAxisAlignment.SPACE_EVENLY)
         ],
         horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )

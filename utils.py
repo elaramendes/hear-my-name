@@ -1,13 +1,17 @@
+from turtledemo.penrose import start
+
 import pyaudio
 import json
 import vosk
 import threading
 import pygame
+import os
+import time
 
 
 class AudioRecorder:
     def __init__(self, name):
-        self.name = name  # Atributo que armazena o nome da pessoa
+        self.name = name
 
     def audio_recorder(self, callback, is_recording_func):
         mic = pyaudio.PyAudio()
@@ -15,6 +19,7 @@ class AudioRecorder:
         # Load model
         model = vosk.Model("model")
 
+        # Show devices
         print("Devices:")
         for i in range(mic.get_device_count()):
             info = mic.get_device_info_by_index(i)
@@ -26,10 +31,10 @@ class AudioRecorder:
         stream.start_stream()
         recognizer = vosk.KaldiRecognizer(model, 16000)
 
-        # name = input(str("What's your name? "))
         print("It's time to speak!")
         print(f"Your name is {self.name}")
 
+        # Clear the text file
         with open('text.txt', 'w'):
             pass
 
@@ -68,14 +73,18 @@ class AudioRecorder:
 
 class PlaySong:
     def __init__(self):
+        pygame.init()
         pygame.mixer.init()
 
     def play_song(self, file):
+        try:
             pygame.mixer.music.load(file)
             pygame.mixer.music.play()
+            print(f"Playing: {file}")
+            while pygame.mixer.music.get_busy():
+                pygame.time.Clock().tick(10)
+        except Exception as e:
+            print(f"Error playing song: {e}")
 
     def stop_song(self):
             pygame.mixer.music.stop()
-
-
-
