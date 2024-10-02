@@ -1,6 +1,5 @@
 import flet as ft
-from song_fn import play_music, stop_song
-import cli
+from utils import AudioRecorder, PlaySong
 import threading
 
 
@@ -53,13 +52,13 @@ def main(page: ft.Page):
         if tf1.value != "":
             if not is_recording:
                 is_recording = True
-                record_button.text = "Exit"
-                threading.Thread(target=cli.audio_recorder, args=(tf1.value, update_text_in_gui, lambda: is_recording)).start()
+                record_button.text = "Stop"
+                recorder = AudioRecorder(tf1.value)
+                threading.Thread(target=recorder.audio_recorder, args=(update_text_in_gui, lambda: is_recording)).start()
             else:
                 is_recording = False
                 record_button.text = "Start"
                 threading.Thread(target=should_exit).start()
-        # cli.audio_recorder(tf1.value)
         page.update()
 
     t = ft.Text()
@@ -69,16 +68,16 @@ def main(page: ft.Page):
     button = ft.ElevatedButton(text="Submit", on_click=submit_button)
     record_button = ft.ElevatedButton(text="Start", on_click=toggle_button)
 
+    # Songs Section
+    player = PlaySong()
     def play_song(e):
-        music_file = "songs/Shotgun Willy - Good Morning Vietnam.mp3"
-        play_music(music_file)
+        player.play_song("songs/Shotgun Willy - Good Morning Vietnam.mp3")
 
-    def stop_music(e):
-        # ft.Text("Song stopped!")
-        stop_song()
+    def stop_song(e):
+        player.stop_song()
 
     play_song = ft.ElevatedButton(text="Play", on_click=play_song)
-    stop_song_button = ft.ElevatedButton(text="Stop", on_click=stop_music)
+    stop_song_button = ft.ElevatedButton(text="Stop", on_click=stop_song)
 
     # Structure
     record_content = ft.Column(
