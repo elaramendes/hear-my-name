@@ -78,3 +78,5 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou fazer 
 ## Licença
 
 Este projeto está licenciado sob a [MIT License](LICENSE.txt).
+
+Músicas por [Doo Piano](https://www.youtube.com/@DooPiano)

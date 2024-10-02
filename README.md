@@ -80,3 +80,5 @@ Contributions are welcome! Feel free to open issues or make pull requests with i
 ## License
 
 This project is licensed under the [MIT License](LICENSE.txt).
+
+Songs by [Doo Piano](https://www.youtube.com/@DooPiano)
