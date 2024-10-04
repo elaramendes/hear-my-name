@@ -1,6 +1,6 @@
 import flet as ft
 from utils import AudioRecorder, PlaySong
-import asyncio
+import threading
 import os
 
 
@@ -48,18 +48,18 @@ def main(page: ft.Page):
     def should_exit():
         page.window_destroy()
 
-    async def toggle_button(e):
+    def toggle_button(e):
         nonlocal is_recording, should_exit
         if tf1.value != "":
             if not is_recording:
                 is_recording = True
                 record_button.text = "Stop"
                 recorder = AudioRecorder(tf1.value)
-                await asyncio.create_task(recorder.audio_recorder(update_text_in_gui, lambda: is_recording))
+                threading.Thread(target=recorder.audio_recorder, args=(update_text_in_gui, lambda: is_recording)).start()
             else:
                 is_recording = False
                 record_button.text = "Start"
-                await asyncio.create_task(should_exit())
+                threading.Thread(target=should_exit).start()
         page.update()
 
     t = ft.Text()
@@ -67,7 +67,7 @@ def main(page: ft.Page):
     tf1 = ft.TextField(label="Name", width=350, input_filter=ft.TextOnlyInputFilter())
 
     button = ft.ElevatedButton(text="Submit", on_click=submit_button)
-    record_button = ft.ElevatedButton(text="Start", on_click=lambda e: asyncio.run(toggle_button(e)))
+    record_button = ft.ElevatedButton(text="Start", on_click=toggle_button)
 
     # Songs Section
     songs = [
@@ -82,14 +82,17 @@ def main(page: ft.Page):
             player.play_song(song)
         return inner_play_song
 
-    async def stop_song(e):
+    def stop_song(e):
         player.stop_song()
+
+    def play_song_thread(player, file):
+        player.play_song(file)
 
     song_buttons = []
     for song in songs:
         song_without_extension = os.path.splitext(song)[0]
         song_name = song_without_extension.split("/")[-1]
-        song_buttons.append(ft.ElevatedButton(text=f"Play {song_name}", on_click=lambda e, song=song: asyncio.create_task(play_selected_song(song))))
+        song_buttons.append(ft.ElevatedButton(text=f"Play {song_name}", on_click=lambda e, song=song: threading.Thread(target=play_song_thread, args=(player, song)).start()))
 
     stop_song_button = ft.ElevatedButton(text="Stop", on_click=stop_song)
 
